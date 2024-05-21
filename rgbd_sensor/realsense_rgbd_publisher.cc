@@ -70,7 +70,7 @@ int RunRgbdPublisher(const std::vector<std::unique_ptr<RGBDSensor>>& devices,
     }
 
     publishers.emplace_back(
-        requested_image_types, sensor->camera_id(), "DRAKE_RGBD_CAMERAS",
+        requested_image_types, sensor->camera_id(), "DRAKE_RGBD_CAMERAS_" + sensor->camera_id(),
         "DRAKE_RGBD_CAMERA_IMAGES_" + sensor->camera_id(), sensor, &lcm);
   }
 
