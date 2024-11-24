@@ -18,8 +18,8 @@ DEFINE_string(id_print_prefix, "Camera id: ",
               "Prefix to print before camera id when --dump_camera_ids "
               "is specified");
 
-DEFINE_int32(num_cameras, 1, "Number of cameras to attempt to open");
-DEFINE_string(serial, "", "Use serial number. --num_cameras must be 1 if set.");
+DEFINE_int32(num_cameras, 2, "Number of cameras to attempt to open");
+DEFINE_string(serial, "", "Use serial numbers. Delimit using ,");
 DEFINE_bool(hardware_depth_registration, false,
             "Enable hardware depth registration");
 DEFINE_bool(software_depth_registration, false,
@@ -118,8 +118,19 @@ int DoMain() {
     image_types.push_back(ImageType::IR_STEREO);
   }
 
-  if (!FLAGS_serial.empty() && FLAGS_num_cameras != 1) {
-    throw std::runtime_error("--serial requires --num_cameras=1.");
+  std::set<std::string> serial_numbers;
+  if (!FLAGS_serial.empty()) {
+    // Split FLAGS_serial into individual serial numbers
+    std::stringstream ss(FLAGS_serial);
+    std::string serial;
+    while (std::getline(ss, serial, ',')) {
+        serial_numbers.insert(serial);
+    }
+
+    // Check that the number of serial numbers matches the number of cameras
+    if (serial_numbers.size() != FLAGS_num_cameras) {
+        throw std::runtime_error("The number of serial numbers in --serial must match --num_cameras.");
+    }
   }
 
   std::vector<std::unique_ptr<RGBDSensor>> sensors;
@@ -133,7 +144,7 @@ int DoMain() {
     if (!FLAGS_serial.empty()) {
       // Since we have not stated the camera, discarding the existing sensor
       // instance should not create a resource conflict.
-      if (sensor->camera_id() != FLAGS_serial)
+      if (serial_numbers.find(sensor->camera_id()) == serial_numbers.end())
         continue;
     }
     sensors.push_back(std::move(sensor));
