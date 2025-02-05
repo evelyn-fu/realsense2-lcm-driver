@@ -107,6 +107,8 @@ RealSenseD400::RealSenseD400(int camera_id, bool use_high_res,
     || camera_name_ == "Intel RealSense D435I";
   const bool is_d455 = camera_name_ == "Intel RealSense D455";
 
+  std::cout << camera_name_ << std::endl;
+
   if (camera_name_ == "Intel RealSense D415") {
     LoadJsonConfig(json_config_file.empty() ? "cfg/d415_high_density.json"
                                             : json_config_file);

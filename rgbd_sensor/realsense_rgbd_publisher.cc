@@ -18,13 +18,14 @@ DEFINE_string(id_print_prefix, "Camera id: ",
               "Prefix to print before camera id when --dump_camera_ids "
               "is specified");
 
-DEFINE_int32(num_cameras, 2, "Number of cameras to attempt to open");
-DEFINE_string(serial, "", "Use serial numbers. Delimit using ,");
+DEFINE_int32(num_cameras, 3, "Number of cameras to attempt to open");
+// DEFINE_string(serial, "928222061590,843512061674,802212061325,819612072303", "Use serial numbers. Delimit using ,");
+DEFINE_string(serial, "928222061590,843512061674,802212061325", "Use serial numbers. Delimit using ,");
 DEFINE_bool(hardware_depth_registration, false,
             "Enable hardware depth registration");
 DEFINE_bool(software_depth_registration, false,
             "Enable software depth registration");
-DEFINE_bool(ir, true, "Publish IR images along with RGB and DEPTH");
+DEFINE_bool(ir, false, "Publish IR images along with RGB and DEPTH");
 DEFINE_bool(use_high_res, false,
             "Use in high res mode (1280X720) instead of the default (848X480)");
 DEFINE_string(
